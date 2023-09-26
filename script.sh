@@ -26,21 +26,10 @@ total_files=$(echo "$pcap_files" | wc -w)
 # Initialize the progress bar
 echo -n "Progress: ["
 
-# Set the batch size and delay between batches
-batch_size=20
-batch_delay=60
-
-# Initialize a counter for processed files
-processed_files=0
 
 # Run tshark in parallel for each PCAP file
 for pcap_file in $pcap_files; do
   analyze_pcap "$(basename "$pcap_file")" &
-  if [ "$processed_files" -eq "$batch_size" ]; then
-    processed_files=0
-    echo -e "\nFirst part complete. Waiting for $batch_delay seconds for next part..."
-    sleep "$batch_delay"
-  fi
 done
 
 # Wait for all tshark instances to finish
